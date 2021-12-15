@@ -1,25 +1,46 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
+import { counterActions } from "../store";
 import classes from "./Counter.module.css";
 
 const Counter = () => {
   const dispatch = useDispatch();
   // react-redux will automatically set up a subscription
   const counter = useSelector((state) => state.counter);
+  const show = useSelector((state) => state.showCounter);
 
-  const incrementHandler = () => dispatch({ type: "increment" });
+  const incrementHandler = () => {
+    // dispatch({ type: "increment" });
 
-  const decrementHandler = () => dispatch({ type: "decrement" });
+    // increment is a method which when executed creates a full action object
+    // with the type set to this automatically created unique action identifier
+    // so we get a full action object automatically created by toolkit
+    dispatch(counterActions.increment());
+  };
 
-  const toggleCounterHandler = () => {};
+  const increaseHandler = () => {
+    // dispatch({ type: "increase", amount: 5 });
+    dispatch(counterActions.increase(5)); // {type: UNIQUE_ID, payload: 5}
+  };
+
+  const decrementHandler = () => {
+    // dispatch({ type: "decrement" });
+    dispatch(counterActions.decrement());
+  };
+
+  const toggleCounterHandler = () => {
+    // dispatch({ type: "toggle" });
+    dispatch(counterActions.toggleCounter());
+  };
 
   return (
     <main className={classes.counter}>
       <h1>Redux Counter</h1>
-      <div className={classes.value}>{counter}</div>
+      {show && <div className={classes.value}>{counter}</div>}
       <div>
         <button onClick={incrementHandler}>Increment</button>
+        <button onClick={increaseHandler}>Increment by 5</button>
         <button onClick={decrementHandler}>decrement</button>
       </div>
       <button onClick={toggleCounterHandler}>Toggle Counter</button>
